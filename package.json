@@ -1,0 +1,36 @@
+{
+  "name": "xpress-cli",
+  "version": "0.0.1",
+  "description": "A CLI tool for generating Express applications",
+  "keywords": [
+    "express",
+    "cli",
+    "generator"
+  ],
+  "author": "Alif Faizar",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs",
+    "start": "node dist/index.js"
+  },
+  "bin": {
+    "xpress": "dist/index.js"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^16.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "commander": "^8.3.0",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "inquirer": "^8.2.0",
+    "tsup": "^1.4.5",
+    "typescript": "^4.5.4"
+  }
+}
