@@ -1,6 +1,6 @@
 {
   "name": "xpress-cli",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A CLI tool for generating Express applications",
   "author": "Alif Faizar",
   "license": "MIT",

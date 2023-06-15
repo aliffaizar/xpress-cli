@@ -3,6 +3,7 @@
 import { join, resolve } from 'path'
 import { program } from 'commander'
 import fs from 'fs'
+import chalk from 'chalk'
 
 const __dirname = resolve()
 
@@ -14,17 +15,21 @@ program
     console.log('Creating a new express app called', projectName)
     const from = join(__dirname, 'templates/express-js')
     const to = join(process.cwd(), projectName)
+
     if (!fs.existsSync(to)) {
       fs.mkdirSync(to)
     }
     fs.cpSync(from, to, { recursive: true })
     const packageJson = JSON.parse(fs.readFileSync(join(to, 'package.json')))
+
     packageJson.name = projectName
     fs.writeFileSync(
       join(to, 'package.json'),
-      JSON.stringify(packageJson + '\n', null, 2)
+      JSON.stringify(packageJson, null, 2) + '\n'
     )
-    console.log('Done!')
+
+    fs.renameSync(join(to, '_gitignore'), join(to, '.gitignore'))
+    console.log(chalk.green('Done!'))
   })
 
 program.parse(process.argv)
