@@ -27,6 +27,12 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+      issues: write
+
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js 18.x
@@ -36,4 +42,4 @@ jobs:
       - run: npm install
       - run: npm run release
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
