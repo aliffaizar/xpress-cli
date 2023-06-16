@@ -27,7 +27,8 @@
   ],
   "scripts": {
     "release": "semantic-release",
-    "commit": "cz"
+    "commit": "cz",
+    "semantic-release": "semantic-release"
   },
   "dependencies": {
     "chalk": "^5.2.0",
@@ -39,10 +40,5 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
     "semantic-release": "^21.0.5"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
   }
 }
