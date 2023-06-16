@@ -1,13 +1,18 @@
 {
   "name": "xpress-cli",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A CLI tool for generating Express applications",
-  "author": "Alif Faizar",
+  "author": "Alif Faizar <aliffaizar21@gmail.com> (https://aliffaizar.com)",
   "license": "MIT",
   "type": "module",
+  "main": "index.js",
   "bin": {
     "xpress": "./index.js"
   },
+  "files": [
+    "index.js",
+    "templates"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/aliffaizar/xpress-cli"
@@ -22,8 +27,7 @@
   ],
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^10.0.1",
-    "inquirer": "^9.2.7"
+    "commander": "^10.0.1"
   },
   "devDependencies": {
     "eslint": "^8.42.0",

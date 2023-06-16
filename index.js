@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 
-import { join, resolve } from 'path'
-import { program } from 'commander'
+import { dirname } from 'path'
 import fs from 'fs'
+import { fileURLToPath } from 'url'
+import { program } from 'commander'
 import chalk from 'chalk'
 
-const __dirname = resolve()
+const CURR_DIR = process.cwd()
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 program
   .command('new')
@@ -13,22 +15,23 @@ program
   .description('Create a new express app')
   .action(async (projectName) => {
     console.log('Creating a new express app called', projectName)
-    const from = join(__dirname, 'templates/express-js')
-    const to = join(process.cwd(), projectName)
+    const from = `${__dirname}/templates/express-js`
+    const to = `${CURR_DIR}/${projectName}`
 
     if (!fs.existsSync(to)) {
       fs.mkdirSync(to)
     }
     fs.cpSync(from, to, { recursive: true })
-    const packageJson = JSON.parse(fs.readFileSync(join(to, 'package.json')))
-
+    const packageJson = JSON.parse(
+      fs.readFileSync(`${to}/package.json`, 'utf-8')
+    )
     packageJson.name = projectName
     fs.writeFileSync(
-      join(to, 'package.json'),
+      `${to}/package.json`,
       JSON.stringify(packageJson, null, 2) + '\n'
     )
 
-    fs.renameSync(join(to, '_gitignore'), join(to, '.gitignore'))
+    fs.renameSync(`${to}/_gitignore`, `${to}/.gitignore`)
     console.log(chalk.green('Done!'))
   })
 
