@@ -11,5 +11,5 @@ npm install -g xpress-cli
 ## Usage
 
 ```bash
-xpress-cli init <project-name>
+xpress-cli new <project-name>
 ```
