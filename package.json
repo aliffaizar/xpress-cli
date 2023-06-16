@@ -26,16 +26,23 @@
     "generator"
   ],
   "scripts": {
-    "release": "semantic-release"
+    "release": "semantic-release",
+    "commit": "cz"
   },
   "dependencies": {
     "chalk": "^5.2.0",
     "commander": "^10.0.1"
   },
   "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
     "semantic-release": "^21.0.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
