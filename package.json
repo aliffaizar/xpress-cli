@@ -40,5 +40,15 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
     "semantic-release": "^21.0.5"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ]
   }
 }
