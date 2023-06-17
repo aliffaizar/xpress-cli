@@ -1,15 +1,10 @@
-import express from 'express'
+const { app } = require('./app')
+const { PORT } = require('./configs/env-config')
 
-import { errorMiddleware } from './middlewares/error-middleware.js'
+async function server() {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`)
+  })
+}
 
-const app = express()
-
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-// Error handler middleware
-app.use(errorMiddleware)
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
-})
+server()
