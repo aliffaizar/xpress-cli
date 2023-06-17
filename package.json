@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^10.0.1"
+    "commander": "^10.0.1",
+    "inquirer": "^9.2.7"
   },
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
