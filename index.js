@@ -15,9 +15,20 @@ function copyTemplate(destination, language, name) {
     fs.mkdirSync(destination)
   }
 
+  if (!isDestinationEmpty(destination)) {
+    console.log(
+      `⚠️  The destination folder ${chalk.yellow(
+        destination.split('/').pop()
+      )} is not empty. Please make sure it is empty before proceeding.`
+    )
+    return
+  }
+
   if (language === 'javascript') {
+    console.log(`⏳ Coppying ${chalk.yellow('Javascript')} template...`)
     fs.cpSync(`${templates}/express-js`, destination, { recursive: true })
   } else {
+    console.log(`⏳ Coppying ${chalk.cyan('Typescript')} template...`)
     fs.cpSync(`${templates}/express-ts`, destination, { recursive: true })
   }
 
@@ -35,10 +46,12 @@ function copyTemplate(destination, language, name) {
 }
 
 async function handleNewAcion(projectName, options) {
-  console.log(chalk.green('Generating new express app...'))
+  console.log(chalk.green('🚀 Preparing your express app...'))
+  let projectPath = `${CURR_DIR}/${projectName}`
 
   if (projectName === '.' || projectName === './') {
     projectName = process.cwd().split('/').pop()
+    projectPath = process.cwd()
   }
 
   let { javascript, typescript } = options
@@ -47,19 +60,32 @@ async function handleNewAcion(projectName, options) {
     console.log(chalk.red('⚠️ Please specify only one language to use!'))
     return
   }
-
+  console.log(projectPath)
   if (!typescript && !javascript) {
     const language = await selectLanguange()
     language === 'Javascript' ? (javascript = true) : (typescript = true)
   }
   if (javascript) {
-    console.log(`⏳ Coppying ${chalk.yellow('Javascript')} template...`)
-    copyTemplate(`${CURR_DIR}/${projectName}`, 'javascript', projectName)
+    copyTemplate(projectPath, 'javascript', projectName)
   }
   if (typescript) {
-    console.log(`⏳ Coppying ${chalk.cyan('Typescript')} template...`)
-    copyTemplate(`${CURR_DIR}/${projectName}`, 'typescript', projectName)
+    copyTemplate(projectPath, 'typescript', projectName)
   }
+  console.log(chalk.green('🎉 Your express app is ready!'))
+
+  if (projectPath !== process.cwd()) {
+    console.log(
+      `👉 Run ${chalk.cyan(
+        `cd ${projectName} && npm install`
+      )} to install dependencies.`
+    )
+  }
+
+  console.log(
+    `👉 Run ${chalk.cyan(
+      `cd ${projectName} && npm start`
+    )} to start the server.`
+  )
 }
 
 async function selectLanguange() {
@@ -72,6 +98,11 @@ async function selectLanguange() {
     },
   ])
   return answers.language
+}
+
+const isDestinationEmpty = (destination) => {
+  const files = fs.readdirSync(destination)
+  return files.length === 0
 }
 
 program
