@@ -8,7 +8,7 @@ import chalk from 'chalk'
 import inquirer from 'inquirer'
 
 const CURR_DIR = process.cwd()
-const templates = dirname(fileURLToPath(import.meta.url)).concat('/templates')
+const templates = `${dirname(fileURLToPath(import.meta.url))}/templates`
 
 function copyTemplate(destination, language, name) {
   if (!fs.existsSync(destination)) {
@@ -24,28 +24,30 @@ function copyTemplate(destination, language, name) {
     return
   }
 
-  if (language === 'javascript') {
-    console.log(`⏳ Coppying ${chalk.yellow('Javascript')} template...`)
-    fs.cpSync(`${templates}/express-js`, destination, { recursive: true })
-  } else {
-    console.log(`⏳ Coppying ${chalk.cyan('Typescript')} template...`)
-    fs.cpSync(`${templates}/express-ts`, destination, { recursive: true })
-  }
+  const templatePath =
+    language === 'javascript'
+      ? `${templates}/express-js`
+      : `${templates}/express-ts`
 
-  const packageJson = JSON.parse(
-    fs.readFileSync(`${destination}/package.json`, 'utf-8')
+  console.log(
+    `⏳ Copying ${
+      language === 'javascript'
+        ? chalk.yellow('Javascript')
+        : chalk.cyan('Typescript')
+    } template...`
   )
+  fs.cpSync(templatePath, destination, { recursive: true })
+
+  const packageJsonPath = `${destination}/package.json`
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
   packageJson.name = name
 
-  fs.writeFileSync(
-    `${destination}/package.json`,
-    JSON.stringify(packageJson, null, 2) + '\n'
-  )
+  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
 
   fs.renameSync(`${destination}/_gitignore`, `${destination}/.gitignore`)
 }
 
-async function handleNewAcion(projectName, options) {
+async function handleNewAction(projectName, options) {
   console.log(chalk.green('🚀 Preparing your express app...'))
   let projectPath = `${CURR_DIR}/${projectName}`
 
@@ -60,17 +62,21 @@ async function handleNewAcion(projectName, options) {
     console.log(chalk.red('⚠️ Please specify only one language to use!'))
     return
   }
-  console.log(projectPath)
+
   if (!typescript && !javascript) {
-    const language = await selectLanguange()
-    language === 'Javascript' ? (javascript = true) : (typescript = true)
+    const language = await selectLanguage()
+    javascript = language === 'Javascript'
+    typescript = language === 'Typescript'
   }
+
   if (javascript) {
     copyTemplate(projectPath, 'javascript', projectName)
   }
+
   if (typescript) {
     copyTemplate(projectPath, 'typescript', projectName)
   }
+
   console.log(chalk.green('🎉 Your express app is ready!'))
 
   if (projectPath !== process.cwd()) {
@@ -81,14 +87,10 @@ async function handleNewAcion(projectName, options) {
     )
   }
 
-  console.log(
-    `👉 Run ${chalk.cyan(
-      `cd ${projectName} && npm start`
-    )} to start the server.`
-  )
+  console.log(`👉 Run ${chalk.cyan(`npm install`)} to install dependencies.`)
 }
 
-async function selectLanguange() {
+async function selectLanguage() {
   const answers = await inquirer.prompt([
     {
       type: 'list',
@@ -97,6 +99,7 @@ async function selectLanguange() {
       choices: ['Javascript', 'Typescript'],
     },
   ])
+
   return answers.language
 }
 
@@ -106,11 +109,14 @@ const isDestinationEmpty = (destination) => {
 }
 
 program
-  .command('new')
-  .argument('<project-name>', 'Name of your express app')
+  .command('new <project-name>')
   .description('Create a new express app')
   .option('-ts, --typescript', 'Use typescript')
-  .option('-js, --javascript', 'Database to use')
-  .action(handleNewAcion)
+  .option('-js, --javascript', 'Use javascript')
+  .action(handleNewAction)
+
+program
+  .command('generate <type> <name>')
+  .description('Generate a new file' + chalk.red(' (Not implemented yet)'))
 
 program.parse(process.argv)
